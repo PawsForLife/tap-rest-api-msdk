@@ -618,7 +618,7 @@ then run:
 uv run pytest
 ```
 
-You can also test the `tap-rest-api-msdk` CLI interface directly:
+You can also test the `tap-rest-api-msdk` CLI directly:
 
 ```bash
 uv run tap-rest-api-msdk --help
