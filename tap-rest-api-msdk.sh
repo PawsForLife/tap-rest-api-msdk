@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Run the tap from any directory using the uv-managed virtual environment.
 
