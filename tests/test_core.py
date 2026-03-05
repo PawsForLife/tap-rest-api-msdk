@@ -1,8 +1,8 @@
 """Tests standard tap features using the built-in SDK tests library."""
 
 from singer_sdk.testing import get_tap_test_class
-from tap_rest_api_msdk.tap import TapRestApiMsdk
 
+from tap_rest_api_msdk.tap import TapRestApiMsdk
 from tests.test_streams import config, json_resp, url_path
 
 

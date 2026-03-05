@@ -3,6 +3,7 @@
 from typing import Any
 
 import requests
+
 from tap_rest_api_msdk.tap import TapRestApiMsdk
 
 
@@ -14,6 +15,7 @@ def config(extras: dict = None) -> dict:
 
     Returns:
         A complete tap config.
+
     """
     contents = {
         "api_url": "https://example.com",
@@ -41,6 +43,7 @@ def json_resp(extras: dict = None) -> dict:
 
     Returns:
         A json object that mocks the results of an API call.
+
     """
     contents = {
         "records": [
@@ -67,6 +70,7 @@ def url_path(path: str = "/path_test") -> str:
 
     Returns:
         A full url.
+
     """
     return "https://example.com" + path
 
@@ -90,6 +94,7 @@ def setup_api(
 
     Returns:
         A mocked requests.Response object.
+
     """
     headers_resp = {}
     if headers_extras:

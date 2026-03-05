@@ -1,14 +1,10 @@
 #!/bin/sh
 
-# This simple script allows you to test your tap from any directory, while still taking
-# advantage of the poetry-managed virtual environment.
-# Adapted from: https://github.com/python-poetry/poetry/issues/2179#issuecomment-668815276
+# Run the tap from any directory using the uv-managed virtual environment.
 
 unset VIRTUAL_ENV
 
-STARTDIR=$(pwd)
 TOML_DIR=$(dirname "$0")
-
 cd "$TOML_DIR" || exit
-poetry install 1>&2
-poetry run tap-rest-api-msdk $*
+uv sync --extra dev 1>&2
+uv run tap-rest-api-msdk "$@"
