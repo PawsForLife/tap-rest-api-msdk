@@ -23,6 +23,22 @@ Built with the Meltano [SDK](https://gitlab.com/meltano/sdk) for Singer Taps.
 
 Gratitude goes to [anelendata](https://github.com/anelendata/tap-rest-api) for inspiring this "SDK-ized" version of their tap.
 
+### Using this fork with Meltano
+
+Meltano resolves plugins from the Hub by `(name, variant)`. The Hub only lists the **widen** variant for `tap-rest-api-msdk`. To use this fork, keep `variant: widen` so resolution succeeds, and override the install source with a custom `pip_url` pointing at this repo:
+
+```yaml
+plugins:
+  extractors:
+    - name: tap-stella-base  # or your extractor name
+      inherit_from: tap-rest-api-msdk
+      variant: widen
+      pip_url: git+https://github.com/PawsForLife/tap-rest-api-msdk.git
+      # ... config
+```
+
+As more adjustments are needed, we can consider making this its own tap (distinct name and package) so it no longer depends on the widen variant or this override pattern.
+
 ## Installation
 If using via Meltano, add the following lines to your `meltano.yml` file and run the following command:
 
