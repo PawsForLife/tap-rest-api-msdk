@@ -22,7 +22,15 @@ printf "\n${GREEN}Cache cleanup complete${NC}\n"
 printf "\n${GREEN}Checking UV installation...${NC}\n"
 if ! command -v uv &> /dev/null; then
   printf "\n${GREEN}Installing UV via official installer...${NC}\n"
-  curl -LsSf https://astral.sh/uv/install.sh | sh || { printf "\n${RED}Failed to install UV${NC}\n"; exit 1; }
+  UV_INSTALLER=$(mktemp -t uv-install.XXXXXX.sh)
+  trap 'rm -f "$UV_INSTALLER"' EXIT
+  curl -LsSf -o "$UV_INSTALLER" https://astral.sh/uv/install.sh || { printf "\n${RED}Failed to download UV installer${NC}\n"; exit 1; }
+  printf "\n${GREEN}Installer saved to %s. Review with: cat %s${NC}\n" "$UV_INSTALLER" "$UV_INSTALLER"
+  printf "${GREEN}Press Enter to run installer, or Ctrl+C to abort...${NC}\n"
+  read -r
+  sh "$UV_INSTALLER" || { printf "\n${RED}Failed to install UV${NC}\n"; exit 1; }
+  trap - EXIT
+  rm -f "$UV_INSTALLER"
   export PATH="$HOME/.local/bin:$PATH"
   if ! command -v uv &> /dev/null; then
     printf "\n${RED}UV installed but not on PATH. Add \$HOME/.local/bin to PATH and re-run.${NC}\n"
