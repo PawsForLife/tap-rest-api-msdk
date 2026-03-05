@@ -19,6 +19,8 @@ Please note that OAuthJWTAuthentication has not been developed. If you are inter
 
 Built with the Meltano [SDK](https://gitlab.com/meltano/sdk) for Singer Taps.
 
+**Requirements:** Python 3.12+.
+
 Gratitude goes to [anelendata](https://github.com/anelendata/tap-rest-api) for inspiring this "SDK-ized" version of their tap.
 
 ## Installation
