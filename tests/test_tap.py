@@ -1,7 +1,6 @@
 import json
 
 from tap_rest_api_msdk.tap import TapRestApiMsdk
-
 from tests.test_streams import config, setup_api
 
 with open("tests/schema.json", "r") as f:

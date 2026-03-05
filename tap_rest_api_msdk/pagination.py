@@ -1,6 +1,6 @@
 """REST API pagination handling."""
 
-from typing import Any, Optional, cast
+from typing import Any, List, Optional, cast
 from urllib.parse import parse_qs, urlparse
 
 import requests
@@ -11,6 +11,7 @@ from singer_sdk.pagination import (
     BasePageNumberPaginator,
     HeaderLinkPaginator,
 )
+
 from tap_rest_api_msdk.utils import unnest_dict
 
 
@@ -85,7 +86,7 @@ class SimpleOffsetPaginator(BaseOffsetPaginator):
         *args,
         offset_records_jsonpath=None,
         pagination_page_size: int = 25,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self._offset_records_jsonpath = offset_records_jsonpath
@@ -102,12 +103,14 @@ class SimpleOffsetPaginator(BaseOffsetPaginator):
 
         """
         if self._offset_records_jsonpath:
-            records_left = len(
+            extracted: List[Any] = cast(
+                List[Any],
                 next(
-                    extract_jsonpath(self._offset_records_jsonpath, response.json()), 0
-                )
-            )  # type: ignore
-            return records_left == self._pagination_page_size
+                    extract_jsonpath(self._offset_records_jsonpath, response.json()),
+                    [],
+                ),
+            )
+            return len(extracted) == self._pagination_page_size
 
         return len(response.json()) == self._pagination_page_size
 
@@ -122,7 +125,7 @@ class RestAPIHeaderLinkPaginator(HeaderLinkPaginator):
         pagination_results_limit: Optional[int] = None,
         use_fake_since_parameter: Optional[bool] = False,
         replication_key: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.pagination_page_size = pagination_page_size

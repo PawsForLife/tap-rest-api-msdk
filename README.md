@@ -19,6 +19,8 @@ Please note that OAuthJWTAuthentication has not been developed. If you are inter
 
 Built with the Meltano [SDK](https://gitlab.com/meltano/sdk) for Singer Taps.
 
+**Requirements:** Python 3.12+.
+
 Gratitude goes to [anelendata](https://github.com/anelendata/tap-rest-api) for inspiring this "SDK-ized" version of their tap.
 
 ## Installation
@@ -333,7 +335,7 @@ There are additional request styles supported as follows for pagination.
 - `simple_offset_paginator` - A paginator that uses `offset` and `limit` parameters to page through a collection of resources. Unlike `offset_paginator`, this paginator does not rely on any headers to determine whether it should keep paginating. Instead, it will continue paginating (by sending requests with increasing `offset`) until the API returns 0 results. You can use this paginator if the API returns a JSON array of records rather than a top-level object.
   - `pagination_page_size` - Sets a limit to number of records per page / response. Default `25` records.
   - `offset_records_jsonpath` - The JSONPath to the records in the response. Defaults to `None`. In the example below we would select the contacts array with `"offset_records_jsonpath": "$.contacts"`. Once the number of records doe not equal `pagination_page_size` the tap will stop paginating.
-    
+
     ```json
     {
       "contacts": [
@@ -596,8 +598,15 @@ bash tap-rest-api-msdk --config=config.sample.json
 ### Initialize your Development Environment
 
 ```bash
-pipx install poetry
-poetry install
+./install.sh
+```
+
+Or manually with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv venv
+. .venv/bin/activate
+uv sync --extra dev
 ```
 
 ### Create and Run Tests
@@ -606,20 +615,20 @@ Create tests within the `tests/` directory and
 then run:
 
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
-You can also test the `tap-rest-api-msdk` CLI interface directly using `poetry run`:
+You can also test the `tap-rest-api-msdk` CLI directly:
 
 ```bash
-poetry run tap-rest-api-msdk --help
+uv run tap-rest-api-msdk --help
 ```
 
 ### Continuous Integration
 Run through the full suite of tests and linters by running
 
 ```bash
-poetry run tox -e py
+uv run tox -e py
 ```
 
 These must pass in order for PR's to be merged.
@@ -634,8 +643,8 @@ This project comes with an example `meltano.yml` project file already created.
 Next, install Meltano (if you haven't already) and any needed plugins:
 
 ```bash
-# Install meltano
-pipx install meltano
+# Install meltano (e.g. with uv)
+uv tool install meltano
 # Initialize meltano within this directory
 cd tap-rest-api-msdk
 meltano install

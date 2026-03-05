@@ -10,6 +10,7 @@ from singer_sdk import Tap
 from singer_sdk import typing as th
 from singer_sdk.authenticators import APIAuthenticatorBase
 from singer_sdk.helpers.jsonpath import extract_jsonpath
+
 from tap_rest_api_msdk.auth import ConfigurableOAuthAuthenticator, get_authenticator
 from tap_rest_api_msdk.streams import DynamicStream
 from tap_rest_api_msdk.utils import flatten_json
