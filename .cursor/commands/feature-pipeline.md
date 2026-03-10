@@ -18,6 +18,7 @@ Reusable commit workflow executed after each successful phase or task. A phase/t
    - Format: `<type>(<scope>): <brief description>`
    - Optional body: goal-focused bullet points, each under 100 characters
    - Type and scope are provided per-phase below; for implementation tasks the implementer infers them from the changes
+   - **Changelog**: Entries reference the feature and the archive summary file (`{archive_dir}/{feature_name}/{feature_name}.md`); each task is a brief bullet (with optional sub-bullets for major parts). Keep the changelog brief; full detail lives in the archived file. Do not link to task/plan files (they are removed during clean-up).
 5. **Execute the commit**: `git commit -m "<message>"`
 
 ## Instructions

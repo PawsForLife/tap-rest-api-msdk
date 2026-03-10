@@ -45,6 +45,7 @@ Execute these phases in order. Focus only on this single task.
 - [ ] Step 3.4: Ran full test suite again; all tests passed
 - [ ] Step 3.5: Verified no code quality errors remain
 - [ ] Step 3.6: Updated `{scratchpad}` with "Task {task_file} completed, tests passing"
+- [ ] Step 3.7: Committed all changes (Commit Procedure per bug-pipeline)
 
 ---
 
@@ -116,14 +117,24 @@ Complete validation steps from `{bugs_dir}/{bug_name}/plans/master/validation.md
 
 ### Step 3.1: Update Changelog
 
-Add entry under `### Fixed` in `## [Unreleased]`:
+Changelog entries reference the **bug fix** and the **archive summary file** only (no links to task/plan files, which are removed during clean-up). Keep the changelog brief; full detail lives in the archive.
+
+Under `## [Unreleased]` → `### Fixed`:
+
+1. **If this is the first task for this bug**: Add a bug-level entry that names the fix and references the archive file (created in pipeline Phase 7). Use the path `{archive_dir}/fix-{bug_name}/fix-{bug_name}.md` even if the file does not exist yet.
+2. **Append this task** as a bullet under that entry. Use the task name or a one-line description. Add sub-bullets only for major parts of the change (keep brief).
+
+**Format**:
 
 ```markdown
 ### Fixed
-- Brief description of the bug fix
-  - Plan: [task-name]({archive_dir}/fix-{bug_name}/plans/tasks/{task_file}.md)
-  - Task: [task-name]({archive_dir}/fix-{bug_name}/tasks/{task_file}.md)
+- **fix-{bug_name}** — Details: [fix-{bug_name}.md]({archive_dir}/fix-{bug_name}/fix-{bug_name}.md)
+  - Task name or one-line description (e.g. "Add regression test for auth")
+    - Optional sub-point for a major part of the change
+  - (Next task adds another bullet at this level)
 ```
+
+When adding a subsequent task for the same bug, locate the existing bug entry and add a new top-level bullet for the new task; do not create a second entry.
 
 ### Step 3.2: Update Documentation
 
@@ -147,6 +158,15 @@ Run full test suite again. All tests must pass. Verify no code quality errors.
 ### Step 3.5: Update Scratchpad
 
 Add to `{scratchpad}`: "Task {task_file} completed, tests passing"
+
+### Step 3.6: Commit Changes
+
+Commit all changes for this task following the Conventional Commits format (per `@.cursor/commands/commit.md`):
+
+1. **Stage changed files**: `git add .`
+2. **Safety check**: verify no `.env`, `*.key`, `*.pem`, or `secrets.*` files are staged. If found, unstage them (`git restore --staged <path>`) and warn.
+3. **Generate a Conventional Commits message**: type inferred from changes; scope from affected paths; description goal-focused; optional body with brief bullets.
+4. **Execute the commit**: `git commit -m "<message>"`
 
 ---
 

@@ -118,13 +118,23 @@ Complete any validation steps from the plan (e.g. AST parsing, Rete.js rendering
 
 ### Step 3.1: Update Changelog
 
-Add entry under `## [Unreleased]` in appropriate subsection (`### Added`, `### Changed`, etc.):
+Changelog entries reference the **feature** and the **archive summary file** only (no links to task/plan files, which are removed during clean-up). Keep the changelog brief; full detail lives in the archive.
+
+Under `## [Unreleased]`, in the appropriate subsection (`### Added`, `### Changed`, etc.):
+
+1. **If this is the first task for this feature**: Add a feature-level entry that names the feature and references the archive file (created in pipeline Phase 6). Use the path `{archive_dir}/{feature_name}/{feature_name}.md` even if the file does not exist yet.
+2. **Append this task** as a bullet under that feature entry. Use the task name or a one-line description. Add sub-bullets only for major parts of the change (keep brief).
+
+**Format**:
 
 ```markdown
-- Description of the change
-  - Plan: [task-name]({archive_dir}/{feature_name}/plans/tasks/{task_file}.md)
-  - Task: [task-name]({archive_dir}/{feature_name}/tasks/{task_file}.md)
+- **{Feature name}** — Details: [{feature_name}.md]({archive_dir}/{feature_name}/{feature_name}.md)
+  - Task name or one-line description (e.g. "Add user auth model")
+    - Optional sub-point for a major part of the change
+  - (Next task adds another bullet at this level)
 ```
+
+When adding a subsequent task for the same feature, locate the existing feature entry and add a new top-level bullet for the new task; do not create a second feature entry.
 
 ### Step 3.2: Update Documentation
 

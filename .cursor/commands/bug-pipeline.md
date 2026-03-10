@@ -2,6 +2,10 @@
 
 Orchestrated multi-phase bug fix implementation. Invokes specialized subagents in sequence with scratchpad handoff. Use when fixing a bug from `{bugs_dir}` (default: `_bugs`). For new features, use `feature-pipeline` instead. Default path conventions are documented in `cursor/CONVENTIONS.md`.
 
+## Commit Procedure
+
+Same as feature-pipeline (run tests, stage, safety check, Conventional Commits, then commit). **Changelog**: Entries reference the bug fix and the archive summary file (`{archive_dir}/fix-{bug_name}/fix-{bug_name}.md`); each task is a brief bullet (with optional sub-bullets for major parts). Keep the changelog brief; full detail lives in the archived file. Do not link to task/plan files (they are removed during clean-up).
+
 ## Prerequisites
 
 - User provides the bug name or identifier (used for `{bug_name}` in paths)
@@ -89,6 +93,7 @@ For **each** task in the applicable list:
    - Read `{scratchpad}` for context
    - Execute the workflow in `@.cursor/workflows/implement-task-fix.md`
    - Implement **only** that task; do not proceed to the next task until all tests pass (tests marked as expected failures are excluded; all other failures are regressions that must be resolved)
+   - Run the **Commit Procedure** (defined in `implement-task-fix.md` Step 3.6: Commit Changes) to commit all changes for the completed task
    - Update `{scratchpad}` with task completion status
 
 **Invoke architect and implementer once per task. Each invocation uses a fresh agent context.**
@@ -103,7 +108,7 @@ For **each** task in the applicable list:
 3. **Delete bug artifacts**: Delete the bug request and the bug folder:
    - Delete `{bugs_dir}/{bug_name}.md`
    - Delete the entire tree `{bugs_dir}/{bug_name}/`
-4. **Commit**: Run the **Commit Procedure** (as defined in feature-pipeline). Use type `docs`, scope `bug`, description: `archive summary for fix-{bug_name}`.
+4. **Commit**: Run the **Commit Procedure** (as defined above). Use type `docs`, scope `bug`, description: `archive summary for fix-{bug_name}`.
 5. **Scratchpad**: Clear completed items from the scratchpad file.
 
 ## Notes
