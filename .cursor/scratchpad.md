@@ -2,11 +2,13 @@
 
 ## Feature: optional-flatten-config
 
-**Pipeline State:** Phase 2 Complete; Phase 3–6 Not started.
+**Pipeline State:** Phase 3 Complete; Phase 4–6 Not started.
 
 **Task Completion Status:** None completed.
 
-**Execution Order:** (empty until Phase 3 completes.)
+**Task count:** 5.
+
+**Execution Order:** 01-add-flatten-records-config-property.md, 02-sync-tests-and-post-process-branch.md, 03-schema-inference-tests-and-get-schema-branch.md, 04-resolve-and-pass-flatten-records-in-discovery.md, 05-update-existing-tests-and-documentation.md.
 
 **Output directory:** `_features/optional-flatten-config/planning/`
 
