@@ -571,6 +571,7 @@ class TapRestApiMsdk(Tap):
         path: str,
         params: dict,
         headers: dict,
+        flatten_records: bool = False,
     ) -> Any:
         """Infer schema from the first records returned by api. Creates a Stream object.
 
@@ -587,6 +588,8 @@ class TapRestApiMsdk(Tap):
             path: required - see config_jsonschema.
             params: required - see config_jsonschema.
             headers: required - see config_jsonschema.
+            flatten_records: When true, flatten sample records before inference; when
+                false, infer from raw nested records.
 
         Raises:
             ValueError: if the response is not valid or a record is not valid json.
@@ -633,11 +636,13 @@ class TapRestApiMsdk(Tap):
                 self.logger.error("Input must be a dict object.")
                 raise ValueError("Input must be a dict object.")
 
-            flat_record = flatten_json(
-                record, except_keys, store_raw_json_message=False
-            )
-
-            builder.add_object(flat_record)
+            if flatten_records:
+                flat_record = flatten_json(
+                    record, except_keys, store_raw_json_message=False
+                )
+                builder.add_object(flat_record)
+            else:
+                builder.add_object(record)
             # Optional add _sdc_raw_json field to store the raw message
             if self.config.get("store_raw_json_message"):
                 builder.add_object({"_sdc_raw_json": {}})

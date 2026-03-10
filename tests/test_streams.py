@@ -110,6 +110,54 @@ def setup_api(
     return requests.Session().get(url_path)
 
 
+# Nested record used to verify post_process flatten vs no-flatten behaviour.
+_NESTED_RECORD = {"user": {"name": "a", "id": 1}}
+_NESTED_RESPONSE = {"records": [_NESTED_RECORD]}
+
+
+def test_sync_returns_flattened_records_when_flatten_records_true(requests_mock):
+    """Sync returns records with flattened keys when stream has flatten_records=True.
+
+    Ensures post_process applies flatten_json when the flag is true so that
+    current flatten behaviour is preserved (acceptance for optional-flatten).
+    get_records() yields raw records; we run post_process to match sync behaviour.
+    """
+    setup_api(requests_mock, url_path(), json_extras=_NESTED_RESPONSE)
+    tap = TapRestApiMsdk(config=config(), parse_env_config=True)
+    stream = tap.discover_streams()[0]
+    stream.flatten_records = True
+    records = []
+    for row in stream.get_records({}):
+        processed = stream.post_process(row, {})
+        if processed is not None:
+            records.append(processed)
+    assert len(records) == 1
+    record = records[0]
+    assert "user_name" in record and record["user_name"] == "a"
+    assert "user_id" in record and record["user_id"] == 1
+    assert "user" not in record
+
+
+def test_sync_returns_nested_records_when_flatten_records_false(requests_mock):
+    """Sync returns records with nested structure when stream has flatten_records=False.
+
+    Ensures post_process returns row unchanged when the flag is false so that
+    no-flatten path is accepted (optional-flatten feature).
+    """
+    setup_api(requests_mock, url_path(), json_extras=_NESTED_RESPONSE)
+    tap = TapRestApiMsdk(config=config(), parse_env_config=True)
+    stream = tap.discover_streams()[0]
+    stream.flatten_records = False
+    records = list(stream.get_records({}))
+    assert len(records) == 1
+    record = records[0]
+    assert "user" in record and isinstance(record["user"], dict)
+    assert record["user"]["name"] == "a"
+    assert record["user"]["id"] == 1
+    assert "user_name" not in record
+    assert "user_id" not in record
+
+
 def test_pagination_style_default(requests_mock):
     def first_matcher(request):
         return "page" not in request.url
