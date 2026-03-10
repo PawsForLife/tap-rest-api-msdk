@@ -56,6 +56,8 @@ plugins:
           kind: integer
         - name: store_raw_json_message
           kind: boolean
+        - name: flatten_records
+          kind: boolean
         - name: pagination_page_size
           kind: integer
         - name: pagination_results_limit
@@ -156,6 +158,7 @@ provided at the top-level will be the default values for each stream.:
 - `backoff_param`: optional: the header parameter to inspect for a backoff time. Defaults to `Retry-After`.
 - `backoff_time_extension`: optional: An additional extension (seconds) to the backoff time over and above a jitter value - use where an API is not precise in it's backoff times. Defaults to `0`.
 - `store_raw_json_message`: optional: An additional extension which will emit the whole message into an field `_sdc_raw_json`. Useful for a dynamic schema which cannot be automatically discovered. Defaults to `False`.
+- `flatten_records`: optional: When `true`, records and inferred schema are flattened (keys like `user_name` from nested `user.name`). When `false`, nested structure is preserved. Defaults to `false`. Stream-level value overrides top-level.
 - `pagination_page_size`: optional: limit for size of page, defaults to None.
 - `pagination_results_limit`: optional: limits the max number of records. Note: Will cause an exception if the limit is hit (except for the `restapi_header_link_paginator`). This should be used for development purposes to restrict the total number of records returned by the API. Defaults to None.
 - `pagination_next_page_param`: optional: The name of the param that indicates the page/offset. Defaults to None.
@@ -205,6 +208,7 @@ will overwrite their top-level counterparts except where noted below:
   headers will be merged with top-level params with stream level params overwriting
   top-level params with the same key
 - `records_path`: optional: a jsonpath string representing the path in the requests response that contains the records to process. Defaults to `$[*]`.
+- `flatten_records`: optional: When `true`, records and inferred schema are flattened; when `false`, nested structure is preserved. Defaults to `false`. Overrides top-level for this stream.
 - `primary_keys`: required: a list of the json keys of the primary key for the stream.
 - `replication_key`: optional: the json key of the replication key. Note that this should be an incrementing integer or datetime object.
 - `except_keys`: This tap automatically flattens the entire json structure and builds keys based on the corresponding paths.

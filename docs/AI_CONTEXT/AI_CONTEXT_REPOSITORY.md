@@ -70,7 +70,7 @@ Per `.cursor/CONVENTIONS.md`: `{context_docs_dir}` = `docs/AI_CONTEXT`; `{featur
 - **TapRestApiMsdk** subclasses `singer_sdk.Tap`.
 - Defines **config_jsonschema** (top-level + stream-level): `api_url`, auth options, pagination/backoff, stream list with path, params, headers, `records_path`, primary/replication keys, `except_keys`, `num_inference_records`, optional `schema` (path or object).
 - **discover_streams()**: Iterates `config["streams"]`, merges stream vs top-level settings, resolves schema (file path, inline dict, or **get_schema()** inference), instantiates **DynamicStream** per stream with shared/cached **authenticator**.
-- **get_schema()**: If no schema provided, performs a GET to `api_url + path`, uses **auth** (and caches `_authenticator`), extracts records via `records_path`, flattens with **utils.flatten_json**, infers schema via `genson.SchemaBuilder` over sample records (and optional `_sdc_raw_json`).
+- **get_schema()**: If no schema provided, performs a GET to `api_url + path`, uses **auth** (and caches `_authenticator`), extracts records via `records_path`. Behaviour depends on `flatten_records`: when true, flattens samples then infers; when false, infers from nested records. Uses `genson.SchemaBuilder` (and optional `_sdc_raw_json` when flattening).
 - **Entry point**: CLI is `TapRestApiMsdk.cli` (Singer SDK); script in `pyproject.toml`: `tap-rest-api-msdk = "tap_rest_api_msdk.tap:TapRestApiMsdk.cli"`.
 
 ### streams (`tap_rest_api_msdk/streams.py`)
@@ -80,7 +80,7 @@ Per `.cursor/CONVENTIONS.md`: `{context_docs_dir}` = `docs/AI_CONTEXT`; `{featur
 - **get_new_paginator()**: Returns SDK or custom paginator by `pagination_request_style` (e.g. `default`/`jsonpath_paginator`, `offset_paginator`, `restapi_header_link_paginator`, `page_number_paginator`, `simple_offset_paginator`, etc.).
 - **get_url_params** / **prepare_request_payload**: Chosen by `pagination_response_style` (page, offset, header_link, hateoas_body); inject replication/since and pagination params.
 - **parse_response()**: Uses `records_path` (JSONPath) to yield raw records from response.
-- **post_process()**: Flattens each row via **utils.flatten_json** (with `except_keys`, optional `_sdc_raw_json`).
+- **post_process()**: When `flatten_records` is true, flattens each row via **utils.flatten_json** (with `except_keys`, optional `_sdc_raw_json`); when false, returns row unchanged.
 - **backoff_wait_generator()**: Overridable for rate limits (message or header-based backoff).
 
 ### client (`tap_rest_api_msdk/client.py`)

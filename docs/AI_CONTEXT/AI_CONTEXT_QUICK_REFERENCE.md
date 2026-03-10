@@ -54,7 +54,7 @@ Quality gate before merge: `uv run tox -e py` must pass (pytest, ruff, mypy).
 
 ## Core Interfaces (Quick View)
 
-- **Tap:** `TapRestApiMsdk` in `tap_rest_api_msdk.tap` — Singer tap; streams built from config.
+- **Tap:** `TapRestApiMsdk` in `tap_rest_api_msdk.tap` — Singer tap; streams built from config. Config includes optional `flatten_records` (default false); when true, records and schema are flattened.
 - **Streams:** `DynamicStream` in `tap_rest_api_msdk.streams` — per-stream sync; uses `RestApiStream`, pagination, auth.
 - **Client:** `RestApiStream` in `tap_rest_api_msdk.client` — HTTP requests and response handling.
 - **Auth:** `get_authenticator` in `tap_rest_api_msdk.auth` — returns auth implementation from config (Basic, API Key, Bearer, OAuth, AWS).

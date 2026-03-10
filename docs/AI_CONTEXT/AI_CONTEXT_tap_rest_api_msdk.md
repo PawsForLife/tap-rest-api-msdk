@@ -37,17 +37,17 @@ The `tap_rest_api_msdk` package is the main Singer tap for generic REST APIs. Ea
   - **config_jsonschema** — top-level (`api_url`, auth, pagination, backoff, streams array) and stream-level (path, params, headers, `records_path`, keys, `schema`, `num_inference_records`, etc.).  
   - **discover_streams() → List[DynamicStream]**  
     - Iterates `config["streams"]`, merges stream vs top-level settings, resolves schema (file path, inline dict, or `get_schema()`), instantiates `DynamicStream` per stream with shared `_authenticator`.  
-  - **get_schema(records_path, except_keys, inference_records, path, params, headers) → dict**  
-    - If auth set, calls `get_authenticator(self)` (caches `_authenticator`). GET to `api_url + path`, extracts records via `records_path`, flattens with `flatten_json`, infers schema via `genson.SchemaBuilder` over sample records (and optional `_sdc_raw_json`). Raises `ValueError` on invalid response or non-dict record.
+  - **get_schema(records_path, except_keys, inference_records, path, params, headers, flatten_records=False) → dict**  
+    - If auth set, calls `get_authenticator(self)` (caches `_authenticator`). GET to `api_url + path`, extracts records via `records_path`. When `flatten_records` is true, flattens samples then infers; when false, infers from nested records. Uses `genson.SchemaBuilder` (and optional `_sdc_raw_json` when flattening). Raises `ValueError` on invalid response or non-dict record.
 
 ### streams.py
 
 - **DynamicStream(RestApiStream)**  
-  - Constructor: `tap`, `name`, `records_path`, `path`, `params`, `headers`, `primary_keys`, `replication_key`, `except_keys`, `next_page_token_path`, `schema`, `pagination_request_style`, `pagination_response_style`, pagination params, `start_date`, `source_search_field`, `source_search_query`, `use_request_body_not_params`, backoff params, `store_raw_json_message`, `authenticator`.  
+  - Constructor: `tap`, `name`, `records_path`, `path`, `params`, `headers`, `primary_keys`, `replication_key`, `except_keys`, `next_page_token_path`, `schema`, `pagination_request_style`, `pagination_response_style`, pagination params, `start_date`, `source_search_field`, `source_search_query`, `use_request_body_not_params`, backoff params, `store_raw_json_message`, `flatten_records`, `authenticator`.  
   - **get_new_paginator()** — Returns paginator by `pagination_request_style`: `default`/`jsonpath_paginator`, `simple_header_paginator`, `header_link_paginator`, `restapi_header_link_paginator`, `style1`/`offset_paginator`, `hateoas_paginator`, `single_page_paginator`, `page_number_paginator`, `simple_offset_paginator`. Raises `ValueError` for unknown style.  
   - **get_url_params** / **prepare_request_payload** — Selected by `pagination_response_style` (`style1`, `offset`, `page`, `header_link`, `hateoas_body`); inject replication/since and pagination params; default `_get_url_params_page_style`.  
   - **parse_response(response) → Iterable[dict]** — Uses `records_path` (JSONPath) to yield raw records.  
-  - **post_process(row, context) → Optional[dict]** — Flattens via `flatten_json(row, except_keys, store_raw_json_message)`.  
+  - **post_process(row, context) → Optional[dict]** — When `flatten_records` is true, returns `flatten_json(row, except_keys, store_raw_json_message)`; when false, returns row unchanged.  
   - **backoff_wait_generator()** — `message` or `header` backoff from config; else SDK default.
 
 ### client.py
@@ -83,8 +83,8 @@ The `tap_rest_api_msdk` package is the main Singer tap for generic REST APIs. Ea
 ## Lifecycle / Entry Points
 
 - **CLI:** `tap-rest-api-msdk` → `tap_rest_api_msdk.tap:TapRestApiMsdk.cli` (in `pyproject.toml`). Singer usage: `--config`, `--catalog`, `--state`, `--discover`.  
-- **Discovery:** Tap loads config → `discover_streams()` builds list of `DynamicStream`; per stream, schema from file/dict or `get_schema()` (GET + flatten + genson). Authenticator obtained once and cached in `_authenticator`.  
-- **Sync:** For each stream, `request_records(context)` uses `get_new_paginator()` → prepare_request (auth, replication, pagination) → `_request` → `parse_response` → `post_process` (flatten) → emit records. 404 on next-page ends stream without raising.
+- **Discovery:** Tap loads config → `discover_streams()` builds list of `DynamicStream`; per stream, schema from file/dict or `get_schema(..., flatten_records)` (GET + optional flatten + genson). Authenticator obtained once and cached in `_authenticator`.  
+- **Sync:** For each stream, `request_records(context)` uses `get_new_paginator()` → prepare_request (auth, replication, pagination) → `_request` → `parse_response` → `post_process` (flatten if `flatten_records` true, else row unchanged) → emit records. 404 on next-page ends stream without raising.
 
 ---
 

@@ -23,7 +23,7 @@
 ## Type & Model Patterns
 
 - **Config schema**: The tap uses Singer SDK typing helpers in `tap_rest_api_msdk/tap.py`: `th.PropertiesList`, `th.Property`, `th.StringType`, `th.ArrayType`, etc. Top-level and stream-level config are defined there and merged at runtime in `discover_streams()`.
-- **No Pydantic/dataclasses for API payloads**: Ingested API data is handled as plain dicts. Stream records come from `parse_response()` (JSONPath extraction) and are flattened in `post_process()` via `flatten_json()` in `tap_rest_api_msdk/utils.py`. Schema inference uses `genson.SchemaBuilder` over flattened records; the result is a JSON Schema dict.
+- **No Pydantic/dataclasses for API payloads**: Ingested API data is handled as plain dicts. Stream records come from `parse_response()` (JSONPath extraction). Flattening is conditional on `flatten_records`: when true, `post_process()` flattens via `flatten_json()`; when false, nested structure is preserved. Schema inference respects `flatten_records` (flatten samples then infer vs infer from nested).
 - **Type hints**: All public functions and methods use annotations (e.g. `Optional[dict]`, `List[DynamicStream]`, `Iterator[dict]`, `requests.Response`). Parameters and return types are declared per project rules.
 
 ---
@@ -72,10 +72,10 @@ A: Use `pytest.raises(ExpectedException):` and inside it perform the call that s
 A: In `tap_rest_api_msdk/auth.py`, add a branch in `select_authenticator()` for the new `auth_method` string. Return an authenticator that implements the SDK’s expected interface (e.g. callable that prepares the request). Credentials can come from `self.config` or environment variables. Ensure `get_authenticator()` continues to cache the result on `self._authenticator` so discovery and sync share one authenticator.
 
 **Q: Where is stream schema defined or inferred?**  
-A: In `discover_streams()` in `tap_rest_api_msdk/tap.py`. If a stream has `schema` set to a file path (string), the schema is loaded from JSON. If it’s a dict, it’s passed to `SchemaBuilder` and converted. Otherwise `get_schema(...)` is called: it performs a GET to the stream path, extracts records via `records_path`, flattens each with `flatten_json`, and uses `SchemaBuilder` to infer the schema. The result is passed to `DynamicStream(schema=schema, ...)`.
+A: In `discover_streams()` in `tap_rest_api_msdk/tap.py`. If a stream has `schema` set to a file path (string), the schema is loaded from JSON. If it’s a dict, it’s passed to `SchemaBuilder` and converted. Otherwise `get_schema(..., flatten_records)` is called: when true, sample records are flattened then inferred; when false, inference uses raw nested records. The result is passed to `DynamicStream(schema=schema, ...)`.
 
 **Q: How is post-processing applied to each record?**  
-A: `DynamicStream.post_process()` in `tap_rest_api_msdk/streams.py` receives each raw record from `parse_response()` and returns `flatten_json(row, self.except_keys, self.store_raw_json_message)`. To add transformations, override `post_process()` in a subclass or in `DynamicStream` (e.g. call `super().post_process(...)` then modify the returned dict).
+A: `DynamicStream.post_process()` in `tap_rest_api_msdk/streams.py` receives each raw record from `parse_response()`. When `flatten_records` is true, it returns `flatten_json(row, ...)`; when false, it returns the row unchanged. To add transformations, override `post_process()` (e.g. call `super().post_process(...)` then modify the returned dict).
 
 **Q: How do I add a new utility used by multiple components?**  
 A: Add a function in `tap_rest_api_msdk/utils.py` with type hints and a short docstring. Use it from `tap.py`, `streams.py`, or `pagination.py` as needed. Keep pure logic in utils; avoid importing tap/stream/client there so the dependency graph stays one-way.
