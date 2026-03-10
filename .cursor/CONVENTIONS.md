@@ -17,6 +17,13 @@ Path placeholders used by agents, commands, and workflows in this folder. Defaul
 - In agents, commands, and workflows: use these placeholders (or the default paths) so paths stay consistent and overridable.
 - **Components/libraries**: use discovery-oriented language — e.g. "each major package or library in the repository", "affected component(s) as identified from the plan". Do not hardcode component names (e.g. `python_service/`, `src/`, `webview-ui/`). Discover components from repo layout (e.g. top-level packages or directories, or as documented in README).
 
+## Git / Fork
+
+- **Default push target**: This repo is a fork. `origin` points to [PawsForLife/tap-rest-api-msdk](https://github.com/PawsForLife/tap-rest-api-msdk). `git push` uses `push.default = current` and `push.remote = origin`, so branches push to the fork by default, not the parent (Widen) repo.
+- To pull from the parent without pushing there, add it as a fetch-only remote:
+  `git remote add upstream https://github.com/Widen/tap-rest-api-msdk.git` then
+  `git remote set-url --push upstream no_push`.
+
 ## Overriding
 
 To use different paths in a repo: document them in the project README or in `.cursor/rules`. Agents and commands should resolve placeholders using those conventions when present.
