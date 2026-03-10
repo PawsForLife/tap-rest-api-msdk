@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-03-10
+
 ### Added
 
 - Config property `flatten_records` (boolean, default `false`) in tap and stream-level config schema for optional-flatten-config.
