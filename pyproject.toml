@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tap-rest-api-msdk"
-version = "1.4.2"
+version = "1.5.0"
 description = "`tap-rest-api-msdk` is a Singer tap for REST APIs, built with the Meltano SDK for Singer Taps (Pet Circle variant)."
 readme = "README.md"
 license = "Apache-2.0"

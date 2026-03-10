@@ -1,10 +1,11 @@
 """Stream type classes for tap-rest-api-msdk."""
 
+import copy
 import email.utils
 import json
 from datetime import datetime
 from string import Template
-from typing import Any, Dict, Generator, Iterable, Optional, Union
+from typing import Any, Dict, Generator, Iterable, Optional, Union, cast
 from urllib.parse import parse_qs, parse_qsl, urlparse
 
 import requests
@@ -73,6 +74,7 @@ class DynamicStream(RestApiStream):
         backoff_param: Optional[str] = "Retry-After",
         backoff_time_extension: Optional[int] = 0,
         store_raw_json_message: Optional[bool] = False,
+        flatten_records: Optional[bool] = False,
         authenticator: Optional[object] = None,
     ) -> None:
         """Class initialization.
@@ -105,6 +107,8 @@ class DynamicStream(RestApiStream):
             backoff_param: see tap.py
             backoff_time_extension: see tap.py
             store_raw_json_message: see tap.py
+            flatten_records: when True, post_process flattens records; when False,
+                returns row unchanged. Default False.
             authenticator: see tap.py
 
         """
@@ -152,6 +156,7 @@ class DynamicStream(RestApiStream):
         self.backoff_param = backoff_param
         self.backoff_time_extension = backoff_time_extension
         self.store_raw_json_message = store_raw_json_message
+        self.flatten_records = flatten_records
         if self.use_request_body_not_params:
             self.prepare_request_payload = get_url_params_styles.get(  # type: ignore
                 pagination_response_style, self._get_url_params_page_style
@@ -593,12 +598,20 @@ class DynamicStream(RestApiStream):
     ) -> Optional[dict]:
         """As needed, append or transform raw data to match expected structure.
 
+        When flatten_records is True, returns flatten_json(row, ...); when False,
+        returns row unchanged.
+
         Args:
             row: required - the record for processing.
             context: optional - the singer context object.
 
         Returns:
-              A record that has been processed.
+              A record that has been processed (flattened or unchanged per
+              flatten_records).
 
         """
-        return flatten_json(row, self.except_keys, self.store_raw_json_message)
+        if self.flatten_records:
+            return flatten_json(row, self.except_keys, self.store_raw_json_message)
+        if self.store_raw_json_message:
+            row["_sdc_raw_json"] = copy.deepcopy(row)
+        return cast(Optional[dict], row)

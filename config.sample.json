@@ -1,4 +1,5 @@
 {
+    "flatten_records": false,
     "pagination_request_style": "jsonpath_paginator",
     "pagination_response_style": "hateoas_body",
     "api_url": "https://myexample_fhir_api_url/base_folder",
