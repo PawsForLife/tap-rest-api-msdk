@@ -11,9 +11,9 @@ Implement one task from the feature pipeline. Invoked once per task with a fresh
 
 ## Prerequisites
 
-- Task document exists in `{features_dir}/{feature_name}/tasks/{task_file}.md`
+- Task document exists at `{features_dir}/{feature_name}/tasks/{task_file}.md` (where `{task_file}` is the basename without `.md`)
 - Task plan exists in `{features_dir}/{feature_name}/plans/tasks/{task_file}.md` (created by architect)
-- User provides: feature name, task file name (e.g. `01-create-model.md`)
+- User provides: feature name, task file name without extension (e.g. `01-create-model`)
 
 ## Instructions
 
@@ -122,8 +122,8 @@ Add entry under `## [Unreleased]` in appropriate subsection (`### Added`, `### C
 
 ```markdown
 - Description of the change
-  - Plan: [task-name]({archive_dir}/{feature_name}/plans/tasks/{task_file})
-  - Task: [task-name]({archive_dir}/{feature_name}/tasks/{task_file})
+  - Plan: [task-name]({archive_dir}/{feature_name}/plans/tasks/{task_file}.md)
+  - Task: [task-name]({archive_dir}/{feature_name}/tasks/{task_file}.md)
 ```
 
 ### Step 3.2: Update Documentation
@@ -137,8 +137,8 @@ Move task and plan to archive:
 ```
 mkdir -p {archive_dir}/{feature_name}/tasks
 mkdir -p {archive_dir}/{feature_name}/plans/tasks
-mv {features_dir}/{feature_name}/tasks/{task_file} {archive_dir}/{feature_name}/tasks/
-mv {features_dir}/{feature_name}/plans/tasks/{task_file} {archive_dir}/{feature_name}/plans/tasks/
+mv {features_dir}/{feature_name}/tasks/{task_file}.md {archive_dir}/{feature_name}/tasks/
+mv {features_dir}/{feature_name}/plans/tasks/{task_file}.md {archive_dir}/{feature_name}/plans/tasks/
 ```
 
 ### Step 3.4: Final Validation

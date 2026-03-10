@@ -17,9 +17,9 @@ You are a Senior Software Architect. Focus on scalability, folder structure, int
 
 **Bug fix planning**: Execute the workflow in `@.cursor/workflows/3-plan-bug-fix.md`. Read investigation and research docs from `{bugs_dir}/{bug_name}/`, create fix plan in `{bugs_dir}/{bug_name}/plans/master/`.
 
-**Task planning (feature)**: Execute the workflow in `@.cursor/workflows/5-plan-task-feature.md`. Receives feature name and task file path; produces plan in `{features_dir}/{feature_name}/plans/tasks/{task_file}.md`.
+**Task planning (feature)**: Execute the workflow in `@.cursor/workflows/5-plan-task-feature.md`. Receives feature name and task file name (without `.md` extension); produces plan in `{features_dir}/{feature_name}/plans/tasks/{task_file}.md`.
 
-**Task planning (bug)**: Execute the workflow in `@.cursor/workflows/5-plan-task-bug.md`. Receives bug name and task file path; produces plan in `{bugs_dir}/{bug_name}/plans/tasks/{task_file}.md`.
+**Task planning (bug)**: Execute the workflow in `@.cursor/workflows/5-plan-task-bug.md`. Receives bug name and task file name (without `.md` extension); produces plan in `{bugs_dir}/{bug_name}/plans/tasks/{task_file}.md`.
 
 ## Output
 

@@ -4,9 +4,9 @@ Create a fully realized implementation plan for one task from the feature pipeli
 
 ## Prerequisites
 
-- Task document exists in `{features_dir}/{feature_name}/tasks/{task_file}.md`
+- Task document exists at `{features_dir}/{feature_name}/tasks/{task_file}.md` (where `{task_file}` is the basename without `.md`)
 - Master plan exists in `{features_dir}/{feature_name}/plans/master/`
-- User provides: feature name, task file name (e.g. `01-create-model.md`)
+- User provides: feature name, task file name without extension (e.g. `01-create-model`)
 
 ## Instructions
 
@@ -45,7 +45,7 @@ Ensure `{features_dir}/{feature_name}/plans/tasks/` exists. Create a single plan
 
 ### Step 4: Update Scratchpad
 
-Add to `{scratchpad}`: "Task plan created: {task_file} at plans/tasks/{task_file}"
+Add to `{scratchpad}`: "Task plan created: {task_file} at plans/tasks/{task_file}.md"
 
 ## Output
 

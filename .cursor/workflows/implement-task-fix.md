@@ -11,9 +11,9 @@ Implement one task from the bug fix pipeline. Invoked once per task with a fresh
 
 ## Prerequisites
 
-- Task document exists in `{bugs_dir}/{bug_name}/tasks/{task_file}.md`
+- Task document exists at `{bugs_dir}/{bug_name}/tasks/{task_file}.md` (where `{task_file}` is the basename without `.md`)
 - Task plan exists in `{bugs_dir}/{bug_name}/plans/tasks/{task_file}.md` (created by architect)
-- User provides: bug name, task file name (e.g. `01-add-regression-test.md`)
+- User provides: bug name, task file name without extension (e.g. `01-add-regression-test`)
 
 ## Instructions
 
@@ -121,8 +121,8 @@ Add entry under `### Fixed` in `## [Unreleased]`:
 ```markdown
 ### Fixed
 - Brief description of the bug fix
-  - Plan: [task-name]({archive_dir}/fix-{bug_name}/plans/tasks/{task_file})
-  - Task: [task-name]({archive_dir}/fix-{bug_name}/tasks/{task_file})
+  - Plan: [task-name]({archive_dir}/fix-{bug_name}/plans/tasks/{task_file}.md)
+  - Task: [task-name]({archive_dir}/fix-{bug_name}/tasks/{task_file}.md)
 ```
 
 ### Step 3.2: Update Documentation
@@ -136,8 +136,8 @@ Move task and plan to archive:
 ```
 mkdir -p {archive_dir}/fix-{bug_name}/tasks
 mkdir -p {archive_dir}/fix-{bug_name}/plans/tasks
-mv {bugs_dir}/{bug_name}/tasks/{task_file} {archive_dir}/fix-{bug_name}/tasks/
-mv {bugs_dir}/{bug_name}/plans/tasks/{task_file} {archive_dir}/fix-{bug_name}/plans/tasks/
+mv {bugs_dir}/{bug_name}/tasks/{task_file}.md {archive_dir}/fix-{bug_name}/tasks/
+mv {bugs_dir}/{bug_name}/plans/tasks/{task_file}.md {archive_dir}/fix-{bug_name}/plans/tasks/
 ```
 
 ### Step 3.4: Final Validation

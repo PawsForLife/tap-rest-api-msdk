@@ -72,7 +72,7 @@ Invoke the `/task-decomposer` subagent. Ask it to:
 
 For **each** task in execution order (from the scratchpad's task list):
 
-Invoke the `/architect` subagent with a **fresh agent context**. Pass the bug name and single task file path. Ask it to:
+Invoke the `/architect` subagent with a **fresh agent context**. Pass the bug name and single task file name (without `.md` extension). Ask it to:
 
 1. Execute the workflow in `@.cursor/workflows/5-plan-task-bug.md`
 2. Create plan at `{bugs_dir}/{bug_name}/plans/tasks/{task_file}.md`
@@ -85,7 +85,7 @@ When resuming: iterate over **remaining tasks** only (from Resume Detection). Ot
 For **each** task in the applicable list:
 
 1. If plan does NOT exist at `{bugs_dir}/{bug_name}/plans/tasks/{task_file}.md`: invoke `/architect` first (per `5-plan-task-bug.md`), then proceed.
-2. Invoke the `/implementer` subagent with a **fresh agent context**. Pass the bug name and single task file path. Ask it to:
+2. Invoke the `/implementer` subagent with a **fresh agent context**. Pass the bug name and single task file name (without `.md` extension). Ask it to:
    - Read `{scratchpad}` for context
    - Execute the workflow in `@.cursor/workflows/implement-task-fix.md`
    - Implement **only** that task; do not proceed to the next task until all tests pass (tests marked as expected failures are excluded; all other failures are regressions that must be resolved)
