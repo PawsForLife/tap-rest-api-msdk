@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `post_process`: when `flatten_records` is false and `store_raw_json_message` is true, the non-flatten return path now adds `_sdc_raw_json` to the row (raw record copy) so the advertised field is emitted.
+
 ### Changed
 
 - Workflow `5-plan-task-bug.md`: normalized `{task_file}` to mean filename without `.md`; paths use `{task_file}.md`; example and scratchpad text updated.

@@ -1,5 +1,6 @@
 """Stream type classes for tap-rest-api-msdk."""
 
+import copy
 import email.utils
 import json
 from datetime import datetime
@@ -611,4 +612,6 @@ class DynamicStream(RestApiStream):
         """
         if self.flatten_records:
             return flatten_json(row, self.except_keys, self.store_raw_json_message)
+        if self.store_raw_json_message:
+            row["_sdc_raw_json"] = copy.deepcopy(row)
         return cast(Optional[dict], row)
