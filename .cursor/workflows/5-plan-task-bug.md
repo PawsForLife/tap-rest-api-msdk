@@ -4,9 +4,9 @@ Create a fully realized implementation plan for one task from the bug fix pipeli
 
 ## Prerequisites
 
-- Task document exists in `{bugs_dir}/{bug_name}/tasks/{task_file}.md`
+- Task document exists at `{bugs_dir}/{bug_name}/tasks/{task_file}.md` (where `{task_file}` is the basename without `.md`)
 - Master plan exists in `{bugs_dir}/{bug_name}/plans/master/`
-- User provides: bug name, task file name (e.g. `01-add-regression-test.md`)
+- User provides: bug name, task file name without extension (e.g. `01-add-regression-test`)
 
 ## Instructions
 
@@ -45,7 +45,7 @@ Ensure `{bugs_dir}/{bug_name}/plans/tasks/` exists. Create a single plan documen
 
 ### Step 4: Update Scratchpad
 
-Add to `{scratchpad}`: "Task plan created: {task_file} at plans/tasks/{task_file}"
+Add to `{scratchpad}`: "Task plan created: {task_file} at plans/tasks/{task_file}.md"
 
 ## Output
 

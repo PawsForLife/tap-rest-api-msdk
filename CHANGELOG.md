@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Workflow `5-plan-task-bug.md`: normalized `{task_file}` to mean filename without `.md`; paths use `{task_file}.md`; example and scratchpad text updated.
+
 ## [1.5.0] - 2026-03-10
 
 ### Added
