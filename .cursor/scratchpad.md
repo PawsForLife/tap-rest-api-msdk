@@ -1,43 +1,5 @@
 # Pipeline Scratchpad
 
-## Feature: optional-flatten-config
-
-**Pipeline State:** Phase 3 Complete; Phase 4 Complete; Phase 5–6 Not started.
-
-**Task Completion Status:** Task 01-add-flatten-records-config-property.md completed, tests passing. Task 02-sync-tests-and-post-process-branch.md completed, tests passing. Task 03-schema-inference-tests-and-get-schema-branch.md completed, tests passing. Task 04-resolve-and-pass-flatten-records-in-discovery.md completed, tests passing. Task 05-update-existing-tests-and-documentation.md completed, tests passing.
-
-**Task count:** 5.
-
-**Execution Order:** 01-add-flatten-records-config-property.md, 02-sync-tests-and-post-process-branch.md, 03-schema-inference-tests-and-get-schema-branch.md, 04-resolve-and-pass-flatten-records-in-discovery.md, 05-update-existing-tests-and-documentation.md.
-
-**Output directory:** `_features/optional-flatten-config/planning/`
-
-**Plan location:** `_features/optional-flatten-config/plans/master/`
-
-**Key decisions:**
-- Single boolean `flatten_records` (default `false`): stream overrides top-level; when false, no flatten in sync or schema inference; when true, current behaviour.
-- When `flatten_records` is false, `post_process` returns row unchanged (no `_sdc_raw_json` added); raw-copy when not flattening deferred to follow-up if needed.
-- Implementation is config-driven branching only in `tap.py` and `streams.py`; `utils.flatten_json` unchanged, called only when `flatten_records` is true.
-
-**Task plan created:** 01-add-flatten-records-config-property.md at plans/tasks/01-add-flatten-records-config-property.md.
-
-**Task plan created:** 03-schema-inference-tests-and-get-schema-branch.md at plans/tasks/03-schema-inference-tests-and-get-schema-branch.md.
-
-**Task plan created:** 05-update-existing-tests-and-documentation.md at plans/tasks/05-update-existing-tests-and-documentation.md.
-
-**Task plan created:** 02-sync-tests-and-post-process-branch.md at plans/tasks/02-sync-tests-and-post-process-branch.md.
-
-**Task plan created:** 04-resolve-and-pass-flatten-records-in-discovery.md at plans/tasks/04-resolve-and-pass-flatten-records-in-discovery.md.
-
-**Key findings:**
-- Flattening is implemented in `tap.py` (`get_schema()` flattens sample records before genson inference) and `streams.py` (`post_process()` always calls `flatten_json`). Config is resolved in `discover_streams()` and passed into `DynamicStream`; no existing property controls flattening.
-- Schema inference: when flatten is off, use `SchemaBuilder.add_object(record)` on raw nested records (genson supports nested dicts). When on, keep current behaviour (flatten then add_object).
-- No new modules or dependencies; `utils.flatten_json` is unchanged and invoked only when config is on.
-
-**Selected solution:** Internal config only. Add boolean `flatten_records` (default `false`) at top-level and stream-level; stream overrides top-level. In `post_process()`: if `flatten_records` true, return `flatten_json(row, ...)`; else return row unchanged. In `get_schema()`: add parameter `flatten_records`; when true flatten samples then infer; when false infer from raw records. Pass `flatten_records` from discover_streams into `DynamicStream` and into `get_schema()`.
-
----
-
 ## Bug: stella-feedback-local-run-failure
 
 **Pipeline State:** Phase 1 Complete.
