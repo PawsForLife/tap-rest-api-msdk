@@ -2,13 +2,20 @@
 
 ## Feature: optional-flatten-config
 
-**Pipeline State:** Phase 1 Complete; Phase 2–6 Not started.
+**Pipeline State:** Phase 2 Complete; Phase 3–6 Not started.
 
 **Task Completion Status:** None completed.
 
 **Execution Order:** (empty until Phase 3 completes.)
 
 **Output directory:** `_features/optional-flatten-config/planning/`
+
+**Plan location:** `_features/optional-flatten-config/plans/master/`
+
+**Key decisions:**
+- Single boolean `flatten_records` (default `false`): stream overrides top-level; when false, no flatten in sync or schema inference; when true, current behaviour.
+- When `flatten_records` is false, `post_process` returns row unchanged (no `_sdc_raw_json` added); raw-copy when not flattening deferred to follow-up if needed.
+- Implementation is config-driven branching only in `tap.py` and `streams.py`; `utils.flatten_json` unchanged, called only when `flatten_records` is true.
 
 **Key findings:**
 - Flattening is implemented in `tap.py` (`get_schema()` flattens sample records before genson inference) and `streams.py` (`post_process()` always calls `flatten_json`). Config is resolved in `discover_streams()` and passed into `DynamicStream`; no existing property controls flattening.
