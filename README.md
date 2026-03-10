@@ -1,6 +1,10 @@
 # tap-rest-api-msdk
 ![singer_rest_api_tap](https://user-images.githubusercontent.com/84364906/220881634-c0d0145a-ab85-44e9-91b6-e8d365da25f3.png)
 
+**Fork notice:** This repository is a fork of [Widen/tap-rest-api-msdk](https://github.com/Widen/tap-rest-api-msdk). We maintain it with changes specific to our needs and comply with the original project’s license. The upstream source is [https://github.com/Widen/tap-rest-api-msdk](https://github.com/Widen/tap-rest-api-msdk). This repo or project may be renamed later; the fork relationship and attribution to the original source remain.
+
+---
+
 `tap-rest-api-msdk` is a Singer tap for generic rest-apis. The novelty of this particular tap
 is that it will auto-discover the stream's schema.
 
