@@ -158,6 +158,73 @@ def test_sync_returns_nested_records_when_flatten_records_false(requests_mock):
     assert "user_id" not in record
 
 
+def test_flatten_records_stream_override_top_level_false_stream_true(requests_mock):
+    """Stream-level flatten_records=True overrides top-level False (discovery wiring).
+
+    Config has top-level flatten_records false and this stream flatten_records true.
+    Asserts the stream emits flattened records and has flattened inferred schema,
+    so discovery correctly resolves and passes flatten_records into get_schema and
+    DynamicStream (black-box: record shape and schema properties only).
+    """
+    cfg = config()
+    cfg["flatten_records"] = False
+    cfg["streams"][0]["flatten_records"] = True
+    setup_api(requests_mock, url_path(), json_extras=_NESTED_RESPONSE)
+    tap = TapRestApiMsdk(config=cfg, parse_env_config=True)
+    streams = tap.discover_streams()
+    stream = streams[0]
+    records = []
+    for row in stream.get_records({}):
+        processed = stream.post_process(row, {})
+        if processed is not None:
+            records.append(processed)
+    assert len(records) == 1
+    record = records[0]
+    assert "user_name" in record and record["user_name"] == "a"
+    assert "user_id" in record and record["user_id"] == 1
+    assert "user" not in record
+    schema = stream.schema
+    assert "properties" in schema
+    assert "user_id" in schema["properties"]
+    assert "user_name" in schema["properties"]
+    assert "user" not in schema["properties"]
+
+
+def test_flatten_records_stream_override_top_level_true_stream_false(requests_mock):
+    """Stream-level flatten_records=False overrides top-level True (discovery wiring).
+
+    Config has top-level flatten_records true and this stream flatten_records false.
+    Asserts the stream emits nested records and has nested inferred schema,
+    so discovery correctly resolves and passes flatten_records into get_schema and
+    DynamicStream (black-box: record shape and schema properties only).
+    """
+    cfg = config()
+    cfg["flatten_records"] = True
+    cfg["streams"][0]["flatten_records"] = False
+    setup_api(requests_mock, url_path(), json_extras=_NESTED_RESPONSE)
+    tap = TapRestApiMsdk(config=cfg, parse_env_config=True)
+    streams = tap.discover_streams()
+    stream = streams[0]
+    records = []
+    for row in stream.get_records({}):
+        processed = stream.post_process(row, {})
+        if processed is not None:
+            records.append(processed)
+    assert len(records) == 1
+    record = records[0]
+    assert "user" in record and isinstance(record["user"], dict)
+    assert record["user"]["name"] == "a"
+    assert record["user"]["id"] == 1
+    assert "user_name" not in record
+    assert "user_id" not in record
+    schema = stream.schema
+    assert "properties" in schema
+    assert "user" in schema["properties"]
+    assert "properties" in schema["properties"]["user"]
+    assert "id" in schema["properties"]["user"]["properties"]
+    assert "name" in schema["properties"]["user"]["properties"]
+
+
 def test_pagination_style_default(requests_mock):
     def first_matcher(request):
         return "page" not in request.url

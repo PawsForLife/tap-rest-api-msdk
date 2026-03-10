@@ -13,3 +13,9 @@
 - Parameter `flatten_records` on `get_schema()` and branch in schema inference: when true, flatten sample records then infer; when false, infer from raw nested records.
   - Plan: [03-schema-inference-tests-and-get-schema-branch](_features/optional-flatten-config/plans/tasks/03-schema-inference-tests-and-get-schema-branch.md)
   - Task: [03-schema-inference-tests-and-get-schema-branch](_features/optional-flatten-config/tasks/03-schema-inference-tests-and-get-schema-branch.md)
+- Discovery resolves `flatten_records` per stream (stream overrides top-level) and passes it to `get_schema()` and `DynamicStream()`.
+  - Plan: [04-resolve-and-pass-flatten-records-in-discovery](_features/optional-flatten-config/plans/tasks/04-resolve-and-pass-flatten-records-in-discovery.md)
+  - Task: [04-resolve-and-pass-flatten-records-in-discovery](_features/optional-flatten-config/tasks/04-resolve-and-pass-flatten-records-in-discovery.md)
+- Documentation and test alignment for default `flatten_records: false`: README, config.sample.json, and AI_CONTEXT updated to document `flatten_records`; existing tests pass with default off.
+  - Plan: [05-update-existing-tests-and-documentation](_features/optional-flatten-config/plans/tasks/05-update-existing-tests-and-documentation.md)
+  - Task: [05-update-existing-tests-and-documentation](_features/optional-flatten-config/tasks/05-update-existing-tests-and-documentation.md)

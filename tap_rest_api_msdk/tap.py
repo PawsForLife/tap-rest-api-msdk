@@ -484,6 +484,10 @@ class TapRestApiMsdk(Tap):
                 "offset_records_jsonpath",
                 self.config.get("offset_records_jsonpath", None),
             )
+            # Stream overrides top-level for flatten_records.
+            flatten_records = stream.get(
+                "flatten_records", self.config.get("flatten_records", False)
+            )
 
             schema = {}
             schema_config = stream.get("schema")
@@ -510,6 +514,7 @@ class TapRestApiMsdk(Tap):
                     path,
                     params,
                     headers,
+                    flatten_records=flatten_records,
                 )
 
             streams.append(
@@ -557,6 +562,7 @@ class TapRestApiMsdk(Tap):
                     backoff_param=self.config.get("backoff_param"),
                     backoff_time_extension=self.config.get("backoff_time_extension"),
                     store_raw_json_message=self.config.get("store_raw_json_message"),
+                    flatten_records=flatten_records,
                     authenticator=self._authenticator,
                 )
             )
