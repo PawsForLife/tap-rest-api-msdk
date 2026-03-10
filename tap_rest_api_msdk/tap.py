@@ -350,6 +350,14 @@ class TapRestApiMsdk(Tap):
             "when the schema is not well defined. Defaults to `False`",
         ),
         th.Property(
+            "flatten_records",
+            th.BooleanType,
+            default=False,
+            required=False,
+            description="When true, flatten records and infer flattened schema; "
+            "when false, preserve nested structure.",
+        ),
+        th.Property(
             "pagination_page_size",
             th.IntegerType,
             default=None,

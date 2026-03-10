@@ -35,6 +35,24 @@ def test_schema_from_object():
     assert s0.schema == BASIC_SCHEMA
 
 
+def test_config_schema_includes_flatten_records():
+    """Assert the tap config schema exposes flatten_records with default false.
+
+    This validates acceptance that the property exists in the schema (top-level
+    and stream-level) before any behaviour uses it, so discovery/config
+    validation and later tasks can rely on it.
+    """
+    schema = TapRestApiMsdk.config_jsonschema
+    assert "properties" in schema
+    assert "flatten_records" in schema["properties"]
+    prop = schema["properties"]["flatten_records"]
+    assert prop.get("default") is False
+    type_val = prop.get("type")
+    assert type_val == "boolean" or (
+        isinstance(type_val, list) and "boolean" in type_val
+    )
+
+
 def test_multiple_streams(requests_mock):
     setup_api(requests_mock)
     setup_api(requests_mock, url_path="https://example.com/path_test2")

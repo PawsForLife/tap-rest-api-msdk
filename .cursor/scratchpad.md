@@ -4,7 +4,7 @@
 
 **Pipeline State:** Phase 3 Complete; Phase 4 Complete; Phase 5–6 Not started.
 
-**Task Completion Status:** None completed.
+**Task Completion Status:** Task 01-add-flatten-records-config-property.md completed, tests passing.
 
 **Task count:** 5.
 
