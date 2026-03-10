@@ -39,7 +39,7 @@ Execute these phases in order. Focus only on this single task.
 - [ ] Step 2.6: Completed service-specific validation (if applicable)
 
 **Phase 3: Completion**
-- [ ] Step 3.1: Updated root `CHANGELOG.md` under `## [Unreleased]` with plan and task links
+- [ ] Step 3.1: Updated root `CHANGELOG.md` under `## [Unreleased]` with feature and archive summary (no task/plan links)
 - [ ] Step 3.2: Updated relevant documentation in `{context_docs_dir}/` and READMEs (if applicable)
 - [ ] Step 3.3: Archived task and plan files to `{archive_dir}/{feature_name}/`
 - [ ] Step 3.4: Ran all project tests (Python + Node) again; all tests passed

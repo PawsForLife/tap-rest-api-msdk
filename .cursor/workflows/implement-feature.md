@@ -41,7 +41,7 @@ You MUST follow these phases in order. **Planning is mandatory** - do not skip t
 - [ ] Step 3.5: Completed service-specific validation (if applicable)
 
 **Phase 4: Completion**
-- [ ] Step 4.1: Updated root `CHANGELOG.md` under `## [Unreleased]` with plan and task links
+- [ ] Step 4.1: Updated root `CHANGELOG.md` under `## [Unreleased]` with feature and archive summary (no task/plan links)
 - [ ] Step 4.2: Updated relevant documentation in `{context_docs_dir}/` directory
 - [ ] Step 4.2: Updated service READMEs (if applicable)
 - [ ] Step 4.3: Archived task and plan files to `{archive_dir}/{feature}/` (maintaining folder hierarchy)
@@ -167,14 +167,15 @@ Create or update root `CHANGELOG.md` under the `## [Unreleased]` section:
    ```
 
 2. Add entries under appropriate subsection (`### Added`, `### Changed`, `### Fixed`, or `### Removed`)
-3. Include description of changes
-4. Add links to the plan and archived task file:
+3. Reference the feature and the archive summary file only (no links to task/plan files; those are removed during clean-up). Each task is a brief bullet; optional sub-bullets for major parts. Full detail lives in the archive.
+
+**Format** (feature pipeline):
 
 ```markdown
 ### Added/Changed/Fixed
-- Description of the change
-  - Plan: [task-name]({archive_dir}/{feature}/plans/tasks/{task-name}.md)
-  - Task: [task-name]({archive_dir}/{feature}/tasks/{task-name}.md)
+- **{feature name}** — Details: [{feature_name}.md]({archive_dir}/{feature_name}/{feature_name}.md)
+  - Task name or one-line description
+  - (Next task adds another bullet)
 ```
 
 **Note:** The changelog uses a version-less format organized by release date. When a release is made, entries from `[Unreleased]` are moved to a new section with format `## YYYY-MM-DD` (e.g., `## 2024-01-15`).
@@ -237,7 +238,7 @@ Need to add support for new parsing behavior in the relevant component.
 - Error handling tests
 ```
 
-**Changelog Entry:** Add under `## [Unreleased]` with plan and task links to `{archive_dir}/{feature}/`.
+**Changelog Entry:** Add under `## [Unreleased]` referencing the feature and archive summary `{archive_dir}/{feature}/{feature}.md` only (no task/plan file links).
 
 ### Example 2: Adding a UI or frontend component
 
@@ -257,7 +258,7 @@ Users need a new UI component or frontend behavior.
 - Any visual or E2E tests per project conventions
 ```
 
-**Changelog Entry:** Add under `## [Unreleased]` with plan and task links to `{archive_dir}/{feature}/`.
+**Changelog Entry:** Add under `## [Unreleased]` referencing the feature and archive summary `{archive_dir}/{feature}/{feature}.md` only (no task/plan file links).
 
 ---
 
@@ -268,7 +269,7 @@ Users need a new UI component or frontend behavior.
 - **Component boundaries matter**: Identify which component(s) are affected and follow component-specific patterns
 - **Keep AI_CONTEXT files current**: Update relevant files in `{context_docs_dir}/` directory for future changes
 - **Archive, don't delete**: Task and plan files go to `{archive_dir}/{feature}/` maintaining folder hierarchy (`tasks/`, `plans/tasks/`), not trash
-- **Links in changelog**: Always include plan and feature file links
+- **Links in changelog**: Reference the feature and archive summary file only; do not link to task/plan files (removed during clean-up)
 - **One feature per file**: Each feature file should describe a single coherent change
 - **Version-less changelog**: Root `CHANGELOG.md` uses date-based releases, not version numbers
 - **Component-specific testing**: Follow testing patterns appropriate to the affected component(s) as documented in project context
