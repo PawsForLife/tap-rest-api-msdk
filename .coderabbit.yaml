@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+---
+inheritance: true
+
+reviews:
+  profile: chill
+  path_filters:
+    - "!_archive/**"
+    - "!_bugs/**"
+    - "!_features/**"
+    - "!.cursor/agents/**"
+    - "!.cursor/commands/**"
+    - "!.cursor/skills/**"
+    - "!.cursor/workflows/**"
+    - "!.cursor/CONVENTIONS.md"
+    - "!.cursor/README.md"
+    - "!.cursor/scratchpad.md"
+    - "!docs/AI_CONTEXT/**"
+    - "!CHANGELOG.md"
+    - "!LICENSE"
+    - "!README.md"
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 1
+    ignore_title_keywords:
+      - "[skip review]"
