@@ -4,6 +4,21 @@ inheritance: true
 
 reviews:
   profile: chill
+  path_filters:
+    - "!_archive/**"
+    - "!_bugs/**"
+    - "!_features/**"
+    - "!.cursor/agents/**"
+    - "!.cursor/commands/**"
+    - "!.cursor/skills/**"
+    - "!.cursor/workflows/**"
+    - "!.cursor/CONVENTIONS.md"
+    - "!.cursor/README.md"
+    - "!.cursor/scratchpad.md"
+    - "!docs/AI_CONTEXT/**"
+    - "!CHANGELOG.md"
+    - "!LICENSE"
+    - "!README.md"
   auto_review:
     enabled: true
     drafts: false
