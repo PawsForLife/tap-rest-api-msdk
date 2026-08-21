@@ -641,6 +641,18 @@ uv run tox -e py
 
 These must pass in order for PR's to be merged.
 
+### Commit Messages
+
+Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+specification (e.g. `fix(streams): handle 404 as end-of-stream`). Pull requests
+into `main` are checked by the `Lint Commit Messages` GitHub Actions workflow
+(`wagoid/commitlint-github-action`), which runs a relaxed `@commitlint/config-conventional`
+ruleset. Merge commits and historical upstream commits are ignored, so only the
+commits you add on a PR are linted.
+
+See the Pet Circle commit convention:
+https://petcircle.atlassian.net/wiki/spaces/TEC/pages/2786427719
+
 ### Testing with [Meltano](https://www.meltano.com)
 
 _**Note:** This tap will work in any Singer environment and does not require Meltano.

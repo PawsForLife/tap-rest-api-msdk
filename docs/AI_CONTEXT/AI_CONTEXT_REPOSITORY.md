@@ -51,7 +51,7 @@ tap-rest-api-msdk/
 ├── docs/
 │   └── AI_CONTEXT/              # AI context docs (this file, quick ref, patterns)
 ├── .cursor/                     # Rules, skills, workflows, conventions
-├── .github/                     # CI (ci.yml, releases.yml), CODEOWNERS, dependabot
+├── .github/                     # CI (ci.yml), commit linting (commitlint.yaml), CODEOWNERS, dependabot
 ├── config.sample.json           # Sample tap config
 ├── pyproject.toml               # Build, deps, scripts, ruff, mypy
 ├── install.sh                   # Venv + deps + test run

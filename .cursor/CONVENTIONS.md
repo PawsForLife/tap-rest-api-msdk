@@ -24,6 +24,15 @@ Path placeholders used by agents, commands, and workflows in this folder. Defaul
   `git remote add upstream https://github.com/Widen/tap-rest-api-msdk.git` then
   `git remote set-url --push upstream no_push`.
 
+## Commit Messages
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+PRs into `main` are linted by the `Lint Commit Messages` GitHub Actions workflow
+(`.github/workflows/commitlint.yaml`, inlined `wagoid/commitlint-github-action`
+with a relaxed `@commitlint/config-conventional` config). Merge commits and
+pre-fork upstream commits are ignored, so only commits added on a PR are checked.
+Pet Circle convention: https://petcircle.atlassian.net/wiki/spaces/TEC/pages/2786427719
+
 ## Overriding
 
 To use different paths in a repo: document them in the project README or in `.cursor/rules`. Agents and commands should resolve placeholders using those conventions when present.
